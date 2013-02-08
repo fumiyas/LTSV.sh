@@ -42,6 +42,7 @@ TODO
 
   * Add more test
   * Support zsh
+  * `ltsv_encode`: Reject or escape TAB and CR character in values
 
 See also
 ----------------------------------------------------------------------
