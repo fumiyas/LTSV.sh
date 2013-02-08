@@ -16,8 +16,8 @@ ltsv_is_valid_name()
 {
   typeset name="${1-}"; shift || return 1
 
-  [[ -z "${name##[a-zA-Z_]*}" ]] || return 1
-  [[ "$name" = "${name%[^a-zA-Z0-9_]*}" ]] || return 1
+  ## Invalid if null, has non alphanumeric char, start with non word char
+  [[ $name = @(|*[^a-zA-Z0-9_]*|[^a-zA-Z_]*) ]] && return 1
 
   return 0
 }
