@@ -12,9 +12,21 @@
 
 LTSV_SEPARATOR="	"
 
+ltsv_is_valid_name()
+{
+  typeset name="${1-}"; shift || return 1
+
+  [[ -z "${name##[a-zA-Z_]*}" ]] || return 1
+  [[ "$name" = "${name%[^a-zA-Z0-9_]*}" ]] || return 1
+
+  return 0
+}
+
 ltsv_decode()
 {
   typeset hash_name="${1-}"; shift || return 2
+  ltsv_is_valid_name "$hash_name" || return 2
+
   typeset line
   if [[ -n "${1-}" ]]; then
     line="$1"; shift
@@ -48,9 +60,10 @@ ltsv_decode()
 
 ltsv_encode()
 {
-  typeset hash_name="$1"; shift
-  typeset ltsv k
+  typeset hash_name="${1-}"; shift || return 2
+  ltsv_is_valid_name "$hash_name" || return 2
 
+  typeset ltsv k
   eval 'for k in "${!'"$hash_name"'[@]}"; do
     ltsv="$ltsv$LTSV_SEPARATOR$k:${'"$hash_name"'[$k]}"
   done'
