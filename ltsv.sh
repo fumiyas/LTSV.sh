@@ -26,15 +26,20 @@ ltsv_decode()
   typeset ifs_orig="$IFS"
   typeset kv k
 
+  ## Clear hash contents
+  #eval "$hash_name=()"
+  eval "$hash_name=([x]=dummy); unset $hash_name[x]"
+
   set -o noglob
   IFS="$LTSV_SEPARATOR"
   for kv in $line; do
     k="${kv%%:*}"
+    ## Check if content is "label:value" format
     [[ "$k" = "$kv" ]] && return 1
+    ## Check if label is "^[0-9A-Za-z_.-]+$/" format
     [[ "$k" = "${k##*[^0-9A-Za-z_.-]}" ]] || return 2
     eval "$hash_name"'[$k]="${kv#*:}"'
   done
-
   [[ "$-" = "$setopt_orig" ]] || set +o noglob
   IFS="$ifs_orig"
 
@@ -97,12 +102,6 @@ ltsv_test()
   hash_dump h
   echo
   unset h
-}
-
-run()
-{
-  echo "$*"
-  "$@"
 }
 
 hash_dump()
