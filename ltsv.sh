@@ -14,30 +14,30 @@ LTSV_SEPARATOR="	"
 
 ltsv_decode()
 {
-  typeset hash_name="$1"; shift
+  typeset hash_name="${1-}"; shift || return 2
   typeset line
   if [[ -n "${1-}" ]]; then
     line="$1"; shift
   else
-    read -r line
+    read -r line || return 1
   fi
-
-  typeset setopt_orig="$-"
-  typeset ifs_orig="$IFS"
-  typeset kv k
 
   ## Clear hash contents
   #eval "$hash_name=()"
   eval "$hash_name=([x]=dummy); unset $hash_name[x]"
 
+  typeset setopt_orig="$-"
+  typeset ifs_orig="$IFS"
   set -o noglob
   IFS="$LTSV_SEPARATOR"
+
+  typeset kv k
   for kv in $line; do
     k="${kv%%:*}"
-    ## Check if content is "label:value" format
-    [[ "$k" = "$kv" ]] && return 1
-    ## Check if label is "^[0-9A-Za-z_.-]+$/" format
-    [[ "$k" = "${k##*[^0-9A-Za-z_.-]}" ]] || return 2
+    ## Check if content is in "label:value" format
+    [[ "$k" = "$kv" ]] && return 3
+    ## Check if label is in "^[0-9A-Za-z_.-]+$/" pattern
+    [[ "$k" = "${k##*[^0-9A-Za-z_.-]}" ]] || return 3
     eval "$hash_name"'[$k]="${kv#*:}"'
   done
   [[ "$-" = "$setopt_orig" ]] || set +o noglob
@@ -107,9 +107,7 @@ ltsv_test()
 hash_dump()
 {
   typeset hash_name="$1"; shift
-
-  typeset k
-  typeset v
+  typeset k v
 
   echo "$hash_name="
   eval 'for k in "${!'"$hash_name"'[@]}"; do
@@ -119,7 +117,7 @@ hash_dump()
 
 if [[ "${0##*/}" = "ltsv.sh" ]]; then
   ltsv_test
+else
+  return 0
 fi
-
-return 0
 
