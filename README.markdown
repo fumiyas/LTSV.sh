@@ -9,6 +9,8 @@ Labeled Tab-Separated Value parser / manipulator for shell
 What's this?
 ----------------------------------------------------------------------
 
+See http://ltsv.org/ and the following example:
+
     #!/bin/bash
     # or
     #!/bin/ksh
@@ -32,7 +34,7 @@ What's this?
     ## Manipulate an LTSV from a hash
     ltsv_encode hash
 
-Requirements:
+Requirements
 ----------------------------------------------------------------------
 
   * bash or ksh (ksh93)
@@ -43,9 +45,4 @@ TODO
   * Add more test
   * Support zsh
   * `ltsv_encode`: Reject or escape TAB and CR character in values
-
-See also
-----------------------------------------------------------------------
-
-  * http://ltsv.org/
 
