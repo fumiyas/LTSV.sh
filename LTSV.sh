@@ -12,8 +12,7 @@
 
 LTSV_SEPARATOR="	"
 
-LTSV_is_valid_name()
-{
+function LTSV_is_valid_name {
   typeset name="${1-}"; shift || return 1
 
   ## Invalid if null, has non alphanumeric char, start with non word char
@@ -22,8 +21,7 @@ LTSV_is_valid_name()
   return 0
 }
 
-LTSV_decode()
-{
+function LTSV_decode {
   typeset hash_name="${1-}"; shift || return 2
   LTSV_is_valid_name "$hash_name" || return 2
 
@@ -58,8 +56,7 @@ LTSV_decode()
   return 0
 }
 
-LTSV_encode()
-{
+function LTSV_encode {
   typeset hash_name="${1-}"; shift || return 2
   LTSV_is_valid_name "$hash_name" || return 2
 
@@ -71,8 +68,7 @@ LTSV_encode()
   printf '%s\n' "${ltsv#$LTSV_SEPARATOR}"
 }
 
-LTSV_test()
-{
+function LTSV_test {
   typeset -A h
 
   LTSV_decode h "foo:Foo	bar:Bar	baz:*"
@@ -117,8 +113,7 @@ LTSV_test()
   unset h
 }
 
-LTSV_hash_dump()
-{
+function LTSV_hash_dump {
   typeset hash_name="$1"; shift
   typeset k v
 
