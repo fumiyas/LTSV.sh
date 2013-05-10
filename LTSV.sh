@@ -12,7 +12,7 @@
 
 LTSV_SEPARATOR="	"
 
-ltsv_is_valid_name()
+LTSV_is_valid_name()
 {
   typeset name="${1-}"; shift || return 1
 
@@ -22,10 +22,10 @@ ltsv_is_valid_name()
   return 0
 }
 
-ltsv_decode()
+LTSV_decode()
 {
   typeset hash_name="${1-}"; shift || return 2
-  ltsv_is_valid_name "$hash_name" || return 2
+  LTSV_is_valid_name "$hash_name" || return 2
 
   typeset line
   if [[ -n "${1-}" ]]; then
@@ -58,10 +58,10 @@ ltsv_decode()
   return 0
 }
 
-ltsv_encode()
+LTSV_encode()
 {
   typeset hash_name="${1-}"; shift || return 2
-  ltsv_is_valid_name "$hash_name" || return 2
+  LTSV_is_valid_name "$hash_name" || return 2
 
   typeset ltsv k
   eval 'for k in "${!'"$hash_name"'[@]}"; do
@@ -71,22 +71,22 @@ ltsv_encode()
   printf '%s\n' "${ltsv#$LTSV_SEPARATOR}"
 }
 
-ltsv_test()
+LTSV_test()
 {
   typeset -A h
 
-  ltsv_decode h "foo:Foo	bar:Bar	baz:*"
+  LTSV_decode h "foo:Foo	bar:Bar	baz:*"
   echo "\$?=$?"
-  hash_dump h
-  ltsv_encode h
+  LTSV_hash_dump h
+  LTSV_encode h
   echo
   unset h
 
   typeset -A h
-  ltsv_decode h < <(echo "foo:Foo	bar:Bar	baz:*")
+  LTSV_decode h < <(echo "foo:Foo	bar:Bar	baz:*")
   echo "\$?=$?"
-  hash_dump h
-  ltsv_encode h
+  LTSV_hash_dump h
+  LTSV_encode h
   echo
   unset h
 
@@ -94,30 +94,30 @@ ltsv_test()
   echo set |read t
   if [[ -n "$t" ]]; then
     typeset -A h
-    echo "foo:Foo	bar:Bar	baz:*" |ltsv_decode h
+    echo "foo:Foo	bar:Bar	baz:*" |LTSV_decode h
     echo "\$?=$?"
-    hash_dump h
-    ltsv_encode h
+    LTSV_hash_dump h
+    LTSV_encode h
     echo
     unset h
   fi
 
   typeset -A h
-  ltsv_decode h "BAD label-value	bar:Bar	baz:*"
+  LTSV_decode h "BAD label-value	bar:Bar	baz:*"
   echo "\$?=$?"
-  hash_dump h
+  LTSV_hash_dump h
   echo
   unset h
 
   typeset -A h
-  ltsv_decode h "BAD label:Foo	bar:Bar	baz:*"
+  LTSV_decode h "BAD label:Foo	bar:Bar	baz:*"
   echo "\$?=$?"
-  hash_dump h
+  LTSV_hash_dump h
   echo
   unset h
 }
 
-hash_dump()
+LTSV_hash_dump()
 {
   typeset hash_name="$1"; shift
   typeset k v
@@ -128,8 +128,8 @@ hash_dump()
   done'
 }
 
-if [[ "${0##*/}" = "ltsv.sh" ]]; then
-  ltsv_test
+if [[ "${0##*/}" = "LTSV.sh" ]]; then
+  LTSV_test
 else
   return 0
 fi

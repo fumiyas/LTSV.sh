@@ -3,7 +3,7 @@ Labeled Tab-Separated Value parser / manipulator for shell
 
   * Copyright (c) 2013 SATOH Fumiyasu @ OSS Technology Corp., Japan
   * License: GNU General Public License version 3
-  * URL: <https://GitHub.com/fumiyas/ltsv.sh>
+  * URL: <https://GitHub.com/fumiyas/LTSV.sh>
   * Twitter: <https://twitter.com/satoh_fumiyasu>
 
 What's this?
@@ -15,13 +15,13 @@ See http://ltsv.org/ and the following example:
     # or
     #!/bin/ksh
 
-    . ./ltsv.sh
+    . ./LTSV.sh
 
     typeset -A hash
     ## Parse an LTSV in a string
-    ltsv_decode hash "foo:Foo	bar:Bar	baz:*baz*"
+    LTSV_decode hash "foo:Foo	bar:Bar	baz:*baz*"
     ## Parse an LTSV read from STDIN
-    #ltsv_decode hash
+    #LTSV_decode hash
 
     echo "${hash[foo]}"
     echo "${hash[bar]}"
@@ -32,7 +32,7 @@ See http://ltsv.org/ and the following example:
     done
 
     ## Manipulate an LTSV from a hash
-    ltsv_encode hash
+    LTSV_encode hash
 
 Requirements
 ----------------------------------------------------------------------
@@ -44,5 +44,5 @@ TODO
 
   * Add more test
   * Support zsh
-  * `ltsv_encode`: Reject or escape TAB and CR character in values
+  * `LTSV_encode`: Reject or escape TAB and CR character in values
 

@@ -2,10 +2,10 @@
 # or
 #!/bin/ksh
 
-. ./ltsv.sh
+. ./LTSV.sh
 
 typeset -A hash
-ltsv_decode hash "foo:Foo	bar:Bar	baz:*baz*"
+LTSV_decode hash "foo:Foo	bar:Bar	baz:*baz*"
 
 echo "${hash[foo]}"
 echo "${hash[bar]}"
@@ -15,5 +15,5 @@ for key in "${!hash[@]}"; do
   echo "$key: ${hash[$key]}"
 done
 
-ltsv_encode hash
+LTSV_encode hash
 
