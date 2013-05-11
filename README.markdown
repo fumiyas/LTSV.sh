@@ -1,7 +1,7 @@
 Labeled Tab-Separated Value parser / manipulator for shell
 ======================================================================
 
-  * Copyright (c) 2013 SATOH Fumiyasu @ OSS Technology Corp., Japan
+  * Copyright (C) 2013 SATOH Fumiyasu @ OSS Technology Corp., Japan
   * License: GNU General Public License version 3
   * URL: <https://GitHub.com/fumiyas/LTSV.sh>
   * Twitter: <https://twitter.com/satoh_fumiyasu>
@@ -17,6 +17,7 @@ See http://ltsv.org/ and the following example:
 
     . ./LTSV.sh
 
+    ## Define a hash to store values
     typeset -A hash
     ## Parse an LTSV in a string
     LTSV_decode hash "foo:Foo	bar:Bar	baz:*baz*"
