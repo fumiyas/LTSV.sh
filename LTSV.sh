@@ -41,19 +41,20 @@ function LTSV_decode {
   set -o noglob
   IFS="$LTSV_SEPARATOR"
 
+  typeset res=0
   typeset kv k
   for kv in $line; do
     k="${kv%%:*}"
     ## Check if content is in "label:value" format
-    [[ "$k" = "$kv" ]] && return 3
+    [[ "$k" = "$kv" ]] && { res=3; break; }
     ## Check if label is in "^[0-9A-Za-z_.-]+$/" pattern
-    [[ "$k" = "${k##*[^0-9A-Za-z_.-]}" ]] || return 3
+    [[ "$k" = "${k##*[^0-9A-Za-z_.-]}" ]] || { res=3; break; }
     eval "$hash_name"'[$k]="${kv#*:}"'
   done
   [[ "$-" = "$setopt_orig" ]] || set +o noglob
   IFS="$ifs_orig"
 
-  return 0
+  return "$res"
 }
 
 function LTSV_encode {
