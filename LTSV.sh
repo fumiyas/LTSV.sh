@@ -3,7 +3,7 @@
 #!/bin/ksh
 ##
 ## Labeled Tab-Separated Value parser / manipulator for shell
-## Copyright (c) 2013 SATOH Fumiyasu @ OSS Technology Corp., Japan
+## Copyright (c) 2013-2015 SATOH Fumiyasu @ OSS Technology Corp., Japan
 ##               <https://GitHub.com/fumiyas/>
 ##               <http://www.OSSTech.co.jp/>
 ##
