@@ -22,8 +22,8 @@ function LTSV_is_valid_name {
 }
 
 function LTSV_decode {
-  typeset hash_name="${1-}"; shift || return 2
-  LTSV_is_valid_name "$hash_name" || return 2
+  typeset dict_name="${1-}"; shift || return 2
+  LTSV_is_valid_name "$dict_name" || return 2
 
   typeset line
   if [[ -n "${1-}" ]]; then
@@ -32,9 +32,9 @@ function LTSV_decode {
     read -r line || return 1
   fi
 
-  ## Clear hash contents
-  #eval "$hash_name=()"
-  eval "$hash_name=([x]=dummy); unset $hash_name[x]"
+  ## Clear dict contents
+  #eval "$dict_name=()"
+  eval "$dict_name=([x]=dummy); unset $dict_name[x]"
 
   typeset setopt_orig="$-"
   typeset ifs_orig="$IFS"
@@ -49,7 +49,7 @@ function LTSV_decode {
     [[ "$k" = "$kv" ]] && { res=3; break; }
     ## Check if label is in "^[0-9A-Za-z_.-]+$/" pattern
     [[ "$k" = "${k##*[^0-9A-Za-z_.-]}" ]] || { res=3; break; }
-    eval "$hash_name"'[$k]="${kv#*:}"'
+    eval "$dict_name"'[$k]="${kv#*:}"'
   done
   [[ "$-" = "$setopt_orig" ]] || set +o noglob
   IFS="$ifs_orig"
@@ -58,12 +58,12 @@ function LTSV_decode {
 }
 
 function LTSV_encode {
-  typeset hash_name="${1-}"; shift || return 2
-  LTSV_is_valid_name "$hash_name" || return 2
+  typeset dict_name="${1-}"; shift || return 2
+  LTSV_is_valid_name "$dict_name" || return 2
 
   typeset ltsv k
-  eval 'for k in "${!'"$hash_name"'[@]}"; do
-    ltsv="$ltsv$LTSV_SEPARATOR$k:${'"$hash_name"'[$k]}"
+  eval 'for k in "${!'"$dict_name"'[@]}"; do
+    ltsv="$ltsv$LTSV_SEPARATOR$k:${'"$dict_name"'[$k]}"
   done'
 
   printf '%s\n' "${ltsv#$LTSV_SEPARATOR}"
@@ -74,7 +74,7 @@ function LTSV_test {
 
   LTSV_decode h "foo:Foo	bar:Bar	baz:*"
   echo "\$?=$?"
-  LTSV_hash_dump h
+  LTSV_dict_dump h
   LTSV_encode h
   echo
   unset h
@@ -82,7 +82,7 @@ function LTSV_test {
   typeset -A h
   LTSV_decode h < <(echo "foo:Foo	bar:Bar	baz:*")
   echo "\$?=$?"
-  LTSV_hash_dump h
+  LTSV_dict_dump h
   LTSV_encode h
   echo
   unset h
@@ -93,7 +93,7 @@ function LTSV_test {
     typeset -A h
     echo "foo:Foo	bar:Bar	baz:*" |LTSV_decode h
     echo "\$?=$?"
-    LTSV_hash_dump h
+    LTSV_dict_dump h
     LTSV_encode h
     echo
     unset h
@@ -102,25 +102,25 @@ function LTSV_test {
   typeset -A h
   LTSV_decode h "BAD label-value	bar:Bar	baz:*"
   echo "\$?=$?"
-  LTSV_hash_dump h
+  LTSV_dict_dump h
   echo
   unset h
 
   typeset -A h
   LTSV_decode h "BAD label:Foo	bar:Bar	baz:*"
   echo "\$?=$?"
-  LTSV_hash_dump h
+  LTSV_dict_dump h
   echo
   unset h
 }
 
-function LTSV_hash_dump {
-  typeset hash_name="$1"; shift
+function LTSV_dict_dump {
+  typeset dict_name="$1"; shift
   typeset k v
 
-  echo "$hash_name="
-  eval 'for k in "${!'"$hash_name"'[@]}"; do
-    echo "  $k: ${'"$hash_name"'[$k]}"
+  echo "$dict_name="
+  eval 'for k in "${!'"$dict_name"'[@]}"; do
+    echo "  $k: ${'"$dict_name"'[$k]}"
   done'
 }
 
